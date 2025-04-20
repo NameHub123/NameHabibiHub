@@ -179,5 +179,5 @@ end)
 playIntro()
 
 spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/be/refs/heads/main/u", true))()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Droidlol/BGSI/refs/heads/main/Endless.lua"))()
 end)
