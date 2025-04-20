@@ -182,16 +182,14 @@ local function playIntro()
     
     elements.IntroSound:Stop()
     elements.ScreenGui:Destroy()
-    
-    local introComplete = true
-    return introComplete
 end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHub/refs/heads/main/NameHub", true))()
+spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NameHub123/NameHub/refs/heads/main/NameHub", true))()
+end)
 
-local introFinished = playIntro()
+playIntro()
 
-if introFinished then
-    print("NameHub intro has completed successfully")
+spawn(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/OhhMyGehlee/be/refs/heads/main/u", true))()
-end
+end)
