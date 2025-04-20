@@ -3,9 +3,7 @@ local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 
 local function createIntro()
-    local player = Players.LocalPlayer
-    local playerGui = player:WaitForChild("PlayerGui")
-    
+    local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "NameHubIntro"
     screenGui.IgnoreGuiInset = true
@@ -68,11 +66,7 @@ local function createIntro()
         particle.Name = "Particle" .. i
         particle.Size = UDim2.new(0, math.random(3, 8), 0, math.random(3, 8))
         particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
-        particle.BackgroundColor3 = Color3.fromRGB(
-            math.random(0, 100), 
-            math.random(100, 255), 
-            math.random(200, 255)
-        )
+        particle.BackgroundColor3 = Color3.fromRGB(math.random(0, 100), math.random(100, 255), math.random(200, 255))
         particle.BackgroundTransparency = 0.2
         particle.BorderSizePixel = 0
         particle.Parent = particles
@@ -120,16 +114,10 @@ local function playIntro()
     
     for _, particle in pairs(elements.Particles:GetChildren()) do
         spawn(function()
-            local randomDelay = math.random() * 1.5
-            wait(randomDelay)
+            wait(math.random() * 1.5)
             
             local startPos = particle.Position
-            local endPos = UDim2.new(
-                math.random(), 
-                0, 
-                math.random(), 
-                0
-            )
+            local endPos = UDim2.new(math.random(), 0, math.random(), 0)
             
             local particleTween = TweenService:Create(
                 particle,
